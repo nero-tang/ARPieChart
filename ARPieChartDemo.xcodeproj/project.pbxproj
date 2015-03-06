@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C2E66161AAA69FD00681350 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 8C2E66151AAA69FD00681350 /* .gitignore */; };
 		8CF7459B1A82A540007B4C07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7459A1A82A540007B4C07 /* AppDelegate.swift */; };
 		8CF7459D1A82A540007B4C07 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF7459C1A82A540007B4C07 /* ViewController.swift */; };
 		8CF745A01A82A540007B4C07 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8CF7459E1A82A540007B4C07 /* Main.storyboard */; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8C2E66151AAA69FD00681350 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		8CF745951A82A540007B4C07 /* ARPieChartDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARPieChartDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CF745991A82A540007B4C07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8CF7459A1A82A540007B4C07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 		8CF7458C1A82A540007B4C07 = {
 			isa = PBXGroup;
 			children = (
+				8C2E66151AAA69FD00681350 /* .gitignore */,
 				8CF745971A82A540007B4C07 /* ARPieChartDemo */,
 				8CF745AD1A82A540007B4C07 /* ARPieChartDemoTests */,
 				8CF745961A82A540007B4C07 /* Products */,
@@ -203,6 +206,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C2E66161AAA69FD00681350 /* .gitignore in Resources */,
 				8CF745A01A82A540007B4C07 /* Main.storyboard in Resources */,
 				8CF745A51A82A540007B4C07 /* LaunchScreen.xib in Resources */,
 				8CF745A21A82A540007B4C07 /* Images.xcassets in Resources */,
@@ -417,6 +421,7 @@
 				8CF745B61A82A540007B4C07 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8CF745B71A82A540007B4C07 /* Build configuration list for PBXNativeTarget "ARPieChartDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -425,6 +430,7 @@
 				8CF745B91A82A540007B4C07 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
