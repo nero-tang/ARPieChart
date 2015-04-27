@@ -1,6 +1,7 @@
 # ARPieChart
 A lightweight pie chart of pure Swift implementation, inspired by [XYPieChart](https://github.com/xyfeng/XYPieChart).
 
+![Screenshot](https://github.com/nero-tang/ARPieChart/blob/master/screenshots/ARPieChartDemo.gif)
 ## Requirements
 
 * iOS 8.0+
