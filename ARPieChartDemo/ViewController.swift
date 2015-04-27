@@ -92,7 +92,7 @@ class ViewController: UIViewController, ARPieChartDelegate, ARPieChartDataSource
     }
     
     func randomInteger(lower: Int, upper: Int) -> Int {
-        return Int(arc4random_uniform(upper - lower + 1)) + lower
+        return Int(arc4random_uniform(UInt32(upper - lower + 1))) + lower
     }
     
     func randomItem() -> PieChartItem {
@@ -106,7 +106,7 @@ class ViewController: UIViewController, ARPieChartDelegate, ARPieChartDataSource
     *  MARK: ARPieChartDelegate
     */
     func pieChart(pieChart: ARPieChart, itemSelectedAtIndex index: Int) {
-        let itemSelected: PieChartItem = dataItems[index] as PieChartItem
+        let itemSelected: PieChartItem = dataItems[index] as! PieChartItem
         selectionLabel.text = "Value: \(itemSelected.value)"
         selectionLabel.textColor = itemSelected.color
     }
@@ -125,17 +125,17 @@ class ViewController: UIViewController, ARPieChartDelegate, ARPieChartDataSource
     }
     
     func pieChart(pieChart: ARPieChart, valueForSliceAtIndex index: Int) -> CGFloat {
-        let item: PieChartItem = dataItems[index] as PieChartItem
+        let item: PieChartItem = dataItems[index] as! PieChartItem
         return item.value
     }
     
     func pieChart(pieChart: ARPieChart, colorForSliceAtIndex index: Int) -> UIColor {
-        let item: PieChartItem = dataItems[index] as PieChartItem
+        let item: PieChartItem = dataItems[index] as! PieChartItem
         return item.color
     }
     
     func pieChart(pieChart: ARPieChart, descriptionForSliceAtIndex index: Int) -> String {
-        let item: PieChartItem = dataItems[index] as PieChartItem
+        let item: PieChartItem = dataItems[index] as! PieChartItem
         return item.description ?? ""
     }
 }
@@ -158,10 +158,6 @@ public class PieChartItem {
         self.value = value
         self.color = color
         self.description = description
-    }
-    
-    public init() {
-        
     }
 }
 

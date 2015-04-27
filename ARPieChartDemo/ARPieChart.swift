@@ -171,7 +171,7 @@ public class ARPieChart: UIView {
             *  Remove unnecessary layers
             */
             for obj in layersToRemove {
-                let layerToRemove: CAShapeLayer = obj as CAShapeLayer
+                let layerToRemove: CAShapeLayer = obj as! CAShapeLayer
                 layerToRemove.removeFromSuperlayer()
             }
             layersToRemove.removeAllObjects()
@@ -209,7 +209,7 @@ public class ARPieChart: UIView {
             }
         } else if diff < 0 {
             while diff != 0 {
-                let layerToRemove = currentLayers.lastObject as CAShapeLayer
+                let layerToRemove = currentLayers.lastObject as! CAShapeLayer
                 currentLayers.removeLastObject()
                 layersToRemove.addObject(layerToRemove)
                 updateLayer(layerToRemove, atIndex: -1, strokeStart: 1, strokeEnd: 1)
@@ -226,7 +226,7 @@ public class ARPieChart: UIView {
             
             let currentValue: CGFloat = dataSource?.pieChart(self, valueForSliceAtIndex: index) ?? 0
             
-            var layer = currentLayers[index] as CAShapeLayer
+            var layer = currentLayers[index] as! CAShapeLayer
             
             toStrokeStart = currentTotal / total
             toStrokeEnd = (currentTotal + abs(currentValue)) / total
@@ -291,7 +291,7 @@ public class ARPieChart: UIView {
         var textLayer: CATextLayer!
         
         if layer.sublayers != nil {
-            textLayer = layer.sublayers.first as CATextLayer
+            textLayer = layer.sublayers.first as! CATextLayer
         } else {
             textLayer = CATextLayer()
             textLayer.contentsScale = UIScreen.mainScreen().scale
@@ -325,7 +325,7 @@ public class ARPieChart: UIView {
         let currentPieLayers = contentView.layer.sublayers
         
         if currentPieLayers != nil && index < currentPieLayers.count {
-            let layerToSelect = currentPieLayers[index] as CAShapeLayer
+            let layerToSelect = currentPieLayers[index] as! CAShapeLayer
             let currentPosition = layerToSelect.position
             let midAngle = (layerToSelect.strokeEnd + layerToSelect.strokeStart) * CGFloat(M_PI) + startAngle
             let newPosition = CGPointMake(currentPosition.x + selectedPieOffset * cos(midAngle), currentPosition.y + selectedPieOffset * sin(midAngle))
@@ -339,7 +339,7 @@ public class ARPieChart: UIView {
         let currentPieLayers = contentView.layer.sublayers
         
         if currentPieLayers != nil && index < currentPieLayers.count {
-            let layerToSelect = currentPieLayers[index] as CAShapeLayer
+            let layerToSelect = currentPieLayers[index] as! CAShapeLayer
             layerToSelect.position = CGPointMake(0, 0)
             layerToSelect.zPosition = 0
             selectedLayerIndex = -1
@@ -358,7 +358,7 @@ public class ARPieChart: UIView {
             
             for var i = 0; i < currentPieLayers.count; i++ {
                 
-                let pieLayer = currentPieLayers[i] as CAShapeLayer
+                let pieLayer = currentPieLayers[i] as! CAShapeLayer
                 
                 let pieStartAngle = pieLayer.strokeStart * CGFloat(M_PI * 2)
                 let pieEndAngle = pieLayer.strokeEnd * CGFloat(M_PI * 2)
@@ -390,8 +390,8 @@ public class ARPieChart: UIView {
         }
     }
     
-    public override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
-        if let anyTouch: UITouch = touches.anyObject() as? UITouch {
+    public override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+        if let anyTouch: UITouch = touches.first as? UITouch {
             let selectedIndex = getSelectedLayerIndexOnTouch(anyTouch)
             handleLayerSelection(fromIndex: self.selectedLayerIndex, toIndex: selectedIndex)
         }
