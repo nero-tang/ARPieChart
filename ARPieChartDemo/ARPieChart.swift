@@ -32,7 +32,7 @@ import QuartzCore
 /**
 *  MARK: ARPieChart datasource
 */
-public protocol ARPieChartDataSource {
+public protocol ARPieChartDataSource: class {
     
     func numberOfSlicesInPieChart(pieChart: ARPieChart) -> Int
     
@@ -46,7 +46,7 @@ public protocol ARPieChartDataSource {
 /**
 *  MARK: ARPieChart delegate
 */
-public protocol ARPieChartDelegate {
+public protocol ARPieChartDelegate: class {
     
     func pieChart(pieChart: ARPieChart, itemSelectedAtIndex index: Int)
     
@@ -59,10 +59,10 @@ public protocol ARPieChartDelegate {
 public class ARPieChart: UIView {
     
     /// Delegate
-    public var delegate: ARPieChartDelegate?
+    public weak var delegate: ARPieChartDelegate?
     
     /// DataSource
-    public var dataSource: ARPieChartDataSource?
+    public weak var dataSource: ARPieChartDataSource?
     
     /// Pie chart start angle, should be in [-PI, PI)
     public var startAngle: CGFloat = CGFloat(-M_PI_2) {
