@@ -158,7 +158,7 @@ public class ARPieChart: UIView {
         
         var diff = itemCount - currentLayers.count
         
-        var layersToRemove: NSMutableArray = NSMutableArray()
+        let layersToRemove: NSMutableArray = NSMutableArray()
         
         /**
         *  Begin CATransaction, disable user interaction
@@ -226,7 +226,7 @@ public class ARPieChart: UIView {
             
             let currentValue: CGFloat = dataSource?.pieChart(self, valueForSliceAtIndex: index) ?? 0
             
-            var layer = currentLayers[index] as! CAShapeLayer
+            let layer = currentLayers[index] as! CAShapeLayer
             
             toStrokeStart = currentTotal / total
             toStrokeEnd = (currentTotal + abs(currentValue)) / total
