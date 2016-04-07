@@ -61,7 +61,7 @@ class ViewController: UIViewController, ARPieChartDelegate, ARPieChartDataSource
         
         let indexToRemove: Int = randomInteger(0, upper: dataItems.count - 1)
         
-        println("Item removed at index \(indexToRemove)")
+        print("Item removed at index \(indexToRemove)")
         
         dataItems.removeObjectAtIndex(indexToRemove)
         pieChart.reloadData()
@@ -70,7 +70,7 @@ class ViewController: UIViewController, ARPieChartDelegate, ARPieChartDataSource
         
         let indexToAdd: Int = randomInteger(0, upper: dataItems.count - 1)
         
-        println("Item added at index \(indexToAdd)")
+        print("Item added at index \(indexToAdd)")
         
         dataItems.insertObject(randomItem(), atIndex: indexToAdd)
         pieChart.reloadData()

@@ -170,6 +170,8 @@
 		8CF7458D1A82A540007B4C07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0710;
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Yufei Tang";
 				TargetAttributes = {
