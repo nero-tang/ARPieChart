@@ -56,6 +56,10 @@ class ViewController: UIViewController, ARPieChartDelegate, ARPieChartDataSource
     }
 
     
+    @IBAction func sliderChangedValue(sender: AnyObject) {
+        updatePieChart()
+    }
+    
     
     @IBAction func deleteItem(sender: AnyObject) {
         
@@ -76,13 +80,17 @@ class ViewController: UIViewController, ARPieChartDelegate, ARPieChartDataSource
         pieChart.reloadData()
     }
     
+    
     @IBAction func refresh(sender: AnyObject) {
+        updatePieChart()
+    }
+    
+    private func updatePieChart() {
         pieChart.innerRadius = CGFloat(innerRadiusSlider.value)
         pieChart.outerRadius = CGFloat(outerRadiusSlider.value)
         pieChart.selectedPieOffset = CGFloat(selectionOffsetSlider.value)
         pieChart.reloadData()
     }
-    
     
     func randomColor() -> UIColor {
         let randomR: CGFloat = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
