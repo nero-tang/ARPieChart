@@ -30,11 +30,11 @@ class ViewController: UIViewController, ARPieChartDelegate, ARPieChartDataSource
         // Random Default Value
         let defaultItemCount = randomInteger(1, upper: 10)
         for _ in 1...defaultItemCount {
-            dataItems.addObject(randomItem())
+            dataItems.add(randomItem())
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         let maxRadius = min(pieChart.frame.width, pieChart.frame.height) / 2
@@ -50,42 +50,42 @@ class ViewController: UIViewController, ARPieChartDelegate, ARPieChartDataSource
         selectionOffsetSlider.value = Float(pieChart.selectedPieOffset)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         pieChart.reloadData()
     }
 
     
-    @IBAction func sliderChangedValue(sender: AnyObject) {
+    @IBAction func sliderChangedValue(_ sender: AnyObject) {
         updatePieChart()
     }
     
     
-    @IBAction func deleteItem(sender: AnyObject) {
+    @IBAction func deleteItem(_ sender: AnyObject) {
         
         let indexToRemove: Int = randomInteger(0, upper: dataItems.count - 1)
         
         print("Item removed at index \(indexToRemove)")
         
-        dataItems.removeObjectAtIndex(indexToRemove)
+        dataItems.removeObject(at: indexToRemove)
         pieChart.reloadData()
     }
-    @IBAction func addItem(sender: AnyObject) {
+    @IBAction func addItem(_ sender: AnyObject) {
         
         let indexToAdd: Int = randomInteger(0, upper: dataItems.count - 1)
         
         print("Item added at index \(indexToAdd)")
         
-        dataItems.insertObject(randomItem(), atIndex: indexToAdd)
+        dataItems.insert(randomItem(), at: indexToAdd)
         pieChart.reloadData()
     }
     
     
-    @IBAction func refresh(sender: AnyObject) {
+    @IBAction func refresh(_ sender: AnyObject) {
         updatePieChart()
     }
     
-    private func updatePieChart() {
+    fileprivate func updatePieChart() {
         pieChart.innerRadius = CGFloat(innerRadiusSlider.value)
         pieChart.outerRadius = CGFloat(outerRadiusSlider.value)
         pieChart.selectedPieOffset = CGFloat(selectionOffsetSlider.value)
@@ -99,7 +99,7 @@ class ViewController: UIViewController, ARPieChartDelegate, ARPieChartDataSource
         return UIColor(red: randomR, green: randomG, blue: randomB, alpha: 1)
     }
     
-    func randomInteger(lower: Int, upper: Int) -> Int {
+    func randomInteger(_ lower: Int, upper: Int) -> Int {
         return Int(arc4random_uniform(UInt32(upper - lower + 1))) + lower
     }
     
@@ -113,36 +113,36 @@ class ViewController: UIViewController, ARPieChartDelegate, ARPieChartDataSource
     /**
     *  MARK: ARPieChartDelegate
     */
-    func pieChart(pieChart: ARPieChart, itemSelectedAtIndex index: Int) {
+    func pieChart(_ pieChart: ARPieChart, itemSelectedAtIndex index: Int) {
         let itemSelected: PieChartItem = dataItems[index] as! PieChartItem
         selectionLabel.text = "Value: \(itemSelected.value)"
         selectionLabel.textColor = itemSelected.color
     }
     
-    func pieChart(pieChart: ARPieChart, itemDeselectedAtIndex index: Int) {
+    func pieChart(_ pieChart: ARPieChart, itemDeselectedAtIndex index: Int) {
         selectionLabel.text = "No Selection"
-        selectionLabel.textColor = UIColor.blackColor()
+        selectionLabel.textColor = UIColor.black
     }
     
     
     /**
     *   MARK: ARPieChartDataSource
     */
-    func numberOfSlicesInPieChart(pieChart: ARPieChart) -> Int {
+    func numberOfSlicesInPieChart(_ pieChart: ARPieChart) -> Int {
         return dataItems.count
     }
     
-    func pieChart(pieChart: ARPieChart, valueForSliceAtIndex index: Int) -> CGFloat {
+    func pieChart(_ pieChart: ARPieChart, valueForSliceAtIndex index: Int) -> CGFloat {
         let item: PieChartItem = dataItems[index] as! PieChartItem
         return item.value
     }
     
-    func pieChart(pieChart: ARPieChart, colorForSliceAtIndex index: Int) -> UIColor {
+    func pieChart(_ pieChart: ARPieChart, colorForSliceAtIndex index: Int) -> UIColor {
         let item: PieChartItem = dataItems[index] as! PieChartItem
         return item.color
     }
     
-    func pieChart(pieChart: ARPieChart, descriptionForSliceAtIndex index: Int) -> String {
+    func pieChart(_ pieChart: ARPieChart, descriptionForSliceAtIndex index: Int) -> String {
         let item: PieChartItem = dataItems[index] as! PieChartItem
         return item.description ?? ""
     }
@@ -151,16 +151,16 @@ class ViewController: UIViewController, ARPieChartDelegate, ARPieChartDataSource
 /**
 *  MARK: Pie chart data item
 */
-public class PieChartItem {
+open class PieChartItem {
     
     /// Data value
-    public var value: CGFloat = 0.0
+    open var value: CGFloat = 0.0
     
     /// Color displayed on chart
-    public var color: UIColor = UIColor.blackColor()
+    open var color: UIColor = UIColor.black
     
     /// Description text
-    public var description: String?
+    open var description: String?
     
     public init(value: CGFloat, color: UIColor, description: String?) {
         self.value = value

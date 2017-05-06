@@ -34,13 +34,13 @@ import QuartzCore
 */
 public protocol ARPieChartDataSource: class {
     
-    func numberOfSlicesInPieChart(pieChart: ARPieChart) -> Int
+    func numberOfSlicesInPieChart(_ pieChart: ARPieChart) -> Int
     
-    func pieChart(pieChart: ARPieChart, valueForSliceAtIndex index: Int) -> CGFloat
+    func pieChart(_ pieChart: ARPieChart, valueForSliceAtIndex index: Int) -> CGFloat
     
-    func pieChart(pieChart: ARPieChart, colorForSliceAtIndex index: Int) -> UIColor
+    func pieChart(_ pieChart: ARPieChart, colorForSliceAtIndex index: Int) -> UIColor
     
-    func pieChart(pieChart: ARPieChart, descriptionForSliceAtIndex index: Int) -> String
+    func pieChart(_ pieChart: ARPieChart, descriptionForSliceAtIndex index: Int) -> String
 }
 
 /**
@@ -48,58 +48,58 @@ public protocol ARPieChartDataSource: class {
 */
 public protocol ARPieChartDelegate: class {
     
-    func pieChart(pieChart: ARPieChart, itemSelectedAtIndex index: Int)
+    func pieChart(_ pieChart: ARPieChart, itemSelectedAtIndex index: Int)
     
-    func pieChart(pieChart: ARPieChart, itemDeselectedAtIndex index: Int)
+    func pieChart(_ pieChart: ARPieChart, itemDeselectedAtIndex index: Int)
 }
 
 /**
 *  MARK: ARPieChart
 */
-public class ARPieChart: UIView {
+open class ARPieChart: UIView {
     
     /// Delegate
-    public weak var delegate: ARPieChartDelegate?
+    open weak var delegate: ARPieChartDelegate?
     
     /// DataSource
-    public weak var dataSource: ARPieChartDataSource?
+    open weak var dataSource: ARPieChartDataSource?
     
     /// Pie chart start angle, should be in [-PI, PI)
-    public var startAngle: CGFloat = CGFloat(-M_PI_2) {
+    open var startAngle: CGFloat = -(.pi / 2) {
         didSet {
-            while startAngle >= CGFloat(M_PI) {
-                startAngle -= CGFloat(M_PI * 2)
+            while startAngle >= CGFloat(Float.pi) {
+                startAngle -= CGFloat(Float.pi * 2)
             }
-            while startAngle < CGFloat(-M_PI) {
-                startAngle += CGFloat(M_PI * 2)
+            while startAngle < -CGFloat(Float.pi) {
+                startAngle += CGFloat(Float.pi * 2)
             }
         }
     }
     
     /// Outer radius
-    public var outerRadius: CGFloat = 0.0
+    open var outerRadius: CGFloat = 0.0
     
     /// Inner radius
-    public var innerRadius: CGFloat = 0.0
+    open var innerRadius: CGFloat = 0.0
     
     /// Offset of selected pie layer
-    public var selectedPieOffset: CGFloat = 0.0
+    open var selectedPieOffset: CGFloat = 0.0
     
     /// Font of layer's description text
-    public var labelFont: UIFont = UIFont.systemFontOfSize(10)
+    open var labelFont: UIFont = UIFont.systemFont(ofSize: 10)
     
-    public var showDescriptionText: Bool = false
+    open var showDescriptionText: Bool = false
     
-    public var animationDuration: Double = 1.0
+    open var animationDuration: Double = 1.0
     
     var contentView: UIView!
     
     var pieCenter: CGPoint {
-        return CGPointMake(CGRectGetMidX(contentView.bounds), CGRectGetMidY(contentView.bounds))
+        return CGPoint(x: contentView.bounds.midX, y: contentView.bounds.midY)
     }
     
     var endAngle: CGFloat {
-        return CGFloat(M_PI * 2) + startAngle
+        return CGFloat(Float.pi * 2) + startAngle
     }
     
     var strokeWidth: CGFloat {
@@ -128,7 +128,7 @@ public class ARPieChart: UIView {
         selectedPieOffset = innerRadius / 2.0
     }
     
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
         contentView.frame = self.bounds
     }
@@ -136,7 +136,7 @@ public class ARPieChart: UIView {
     /**
         Stroke chart / update current chart
     */
-    public func reloadData() {
+    open func reloadData() {
         
         let parentLayer: CALayer = contentView.layer
         
@@ -163,7 +163,7 @@ public class ARPieChart: UIView {
         /**
         *  Begin CATransaction, disable user interaction
         */
-        contentView.userInteractionEnabled = false
+        contentView.isUserInteractionEnabled = false
         CATransaction.begin()
         CATransaction.setAnimationDuration(animationDuration)
         CATransaction.setCompletionBlock { () -> Void in
@@ -179,7 +179,7 @@ public class ARPieChart: UIView {
             /**
             *  Re-enable user interaction
             */
-            self.contentView.userInteractionEnabled = true
+            self.contentView.isUserInteractionEnabled = true
         }
         
         /**
@@ -203,15 +203,15 @@ public class ARPieChart: UIView {
         if diff > 0 {
             while diff != 0 {
                 let newLayer = createPieLayer()
-                parentLayer.insertSublayer(newLayer, atIndex: 0)
-                currentLayers.insertObject(newLayer, atIndex: 0)
+                parentLayer.insertSublayer(newLayer, at: 0)
+                currentLayers.insert(newLayer, at: 0)
                 diff -= 1
             }
         } else if diff < 0 {
             while diff != 0 {
                 let layerToRemove = currentLayers.lastObject as! CAShapeLayer
                 currentLayers.removeLastObject()
-                layersToRemove.addObject(layerToRemove)
+                layersToRemove.add(layerToRemove)
                 updateLayer(layerToRemove, atIndex: -1, strokeStart: 1, strokeEnd: 1)
                 diff += 1
             }
@@ -241,39 +241,39 @@ public class ARPieChart: UIView {
     func createPieLayer() -> CAShapeLayer {
         let pieLayer = CAShapeLayer()
         
-        pieLayer.fillColor = UIColor.clearColor().CGColor
-        pieLayer.borderColor = UIColor.clearColor().CGColor
+        pieLayer.fillColor = UIColor.clear.cgColor
+        pieLayer.borderColor = UIColor.clear.cgColor
         pieLayer.strokeStart = 0
         pieLayer.strokeEnd = 0
 
         return pieLayer
     }
     
-    func createArcAnimationForLayer(layer: CAShapeLayer, key: String, toValue: AnyObject!) {
+    func createArcAnimationForLayer(_ layer: CAShapeLayer, key: String, toValue: AnyObject!) {
         
         let arcAnimation: CABasicAnimation = CABasicAnimation(keyPath: key);
         
         var fromValue: AnyObject!
         if key == "strokeStart" || key == "strokeEnd" {
-            fromValue = 0
+            fromValue = NSNumber(value: 0)
         }
         
-        if layer.presentationLayer() != nil {
-            fromValue = layer.presentationLayer()!.valueForKey(key)
+        if layer.presentation() != nil {
+            fromValue = layer.presentation()!.value(forKey: key) as AnyObject
         }
         
         arcAnimation.fromValue = fromValue
         arcAnimation.toValue = toValue
         arcAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
-        layer.addAnimation(arcAnimation, forKey: key)
+        layer.add(arcAnimation, forKey: key)
         layer.setValue(toValue, forKey: key)
     }
     
-    func updateLayer(layer: CAShapeLayer, atIndex index: Int, strokeStart: CGFloat, strokeEnd: CGFloat) {
+    func updateLayer(_ layer: CAShapeLayer, atIndex index: Int, strokeStart: CGFloat, strokeEnd: CGFloat) {
         
         /// Add animation to stroke path (in case radius changes)
         let path = UIBezierPath(arcCenter: pieCenter, radius: strokeRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
-        createArcAnimationForLayer(layer, key: "path", toValue: path.CGPath)
+        createArcAnimationForLayer(layer, key: "path", toValue: path.cgPath)
         
         layer.lineWidth = strokeWidth
         
@@ -281,11 +281,11 @@ public class ARPieChart: UIView {
         *  Assign stroke color by data source
         */
         if index >= 0 {
-            layer.strokeColor = dataSource?.pieChart(self, colorForSliceAtIndex: index).CGColor
+            layer.strokeColor = dataSource?.pieChart(self, colorForSliceAtIndex: index).cgColor
         }
         
-        createArcAnimationForLayer(layer, key: "strokeStart", toValue: strokeStart)
-        createArcAnimationForLayer(layer, key: "strokeEnd", toValue: strokeEnd)
+        createArcAnimationForLayer(layer, key: "strokeStart", toValue: strokeStart as AnyObject!)
+        createArcAnimationForLayer(layer, key: "strokeEnd", toValue: strokeEnd as AnyObject!)
         
         /// Custom text layer for description
         var textLayer: CATextLayer!
@@ -294,13 +294,13 @@ public class ARPieChart: UIView {
             textLayer = layer.sublayers!.first as! CATextLayer
         } else {
             textLayer = CATextLayer()
-            textLayer.contentsScale = UIScreen.mainScreen().scale
-            textLayer.wrapped = true
+            textLayer.contentsScale = UIScreen.main.scale
+            textLayer.isWrapped = true
             textLayer.alignmentMode = kCAAlignmentCenter
             layer.addSublayer(textLayer)
         }
         
-        textLayer.font = CGFontCreateWithFontName(labelFont.fontName)
+        textLayer.font = CGFont(labelFont.fontName as NSString)
         textLayer.fontSize = labelFont.pointSize
         textLayer.string = ""
         
@@ -308,45 +308,45 @@ public class ARPieChart: UIView {
             textLayer.string = dataSource?.pieChart(self, descriptionForSliceAtIndex: index)
         }
         
-        let size: CGSize = textLayer.string!.sizeWithAttributes([NSFontAttributeName: labelFont])
-        textLayer.frame = CGRectMake(0, 0, size.width, size.height)
+        let size: CGSize = (textLayer.string! as AnyObject).size(attributes: [NSFontAttributeName: labelFont])
+        textLayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         
-        if (strokeEnd - strokeStart) * CGFloat(M_PI) * 2 * strokeRadius < max(size.width, size.height) {
+        if (strokeEnd - strokeStart) * CGFloat(Float.pi) * 2 * strokeRadius < max(size.width, size.height) {
             textLayer.string = ""
         }
         
-        let midAngle: CGFloat = (strokeStart + strokeEnd) * CGFloat(M_PI) + startAngle
+        let midAngle: CGFloat = (strokeStart + strokeEnd) * CGFloat(Float.pi) + startAngle
         
-        textLayer.position = CGPointMake(pieCenter.x + strokeRadius * cos(midAngle), pieCenter.y + strokeRadius * sin(midAngle))
+        textLayer.position = CGPoint(x: pieCenter.x + strokeRadius * cos(midAngle), y: pieCenter.y + strokeRadius * sin(midAngle))
     }
     
-    public func selectLayerAtIndex(index: Int) {
+    open func selectLayerAtIndex(_ index: Int) {
         
         let currentPieLayers = contentView.layer.sublayers
         
         if currentPieLayers != nil && index < currentPieLayers!.count {
             let layerToSelect = currentPieLayers![index] as! CAShapeLayer
             let currentPosition = layerToSelect.position
-            let midAngle = (layerToSelect.strokeEnd + layerToSelect.strokeStart) * CGFloat(M_PI) + startAngle
-            let newPosition = CGPointMake(currentPosition.x + selectedPieOffset * cos(midAngle), currentPosition.y + selectedPieOffset * sin(midAngle))
+            let midAngle = (layerToSelect.strokeEnd + layerToSelect.strokeStart) * CGFloat(Float.pi) + startAngle
+            let newPosition = CGPoint(x: currentPosition.x + selectedPieOffset * cos(midAngle), y: currentPosition.y + selectedPieOffset * sin(midAngle))
             layerToSelect.position = newPosition
             selectedLayerIndex = index
         }
     }
     
-    public func deselectLayerAtIndex(index: Int) {
+    open func deselectLayerAtIndex(_ index: Int) {
         
         let currentPieLayers = contentView.layer.sublayers
         
         if currentPieLayers != nil && index < currentPieLayers!.count {
             let layerToSelect = currentPieLayers![index] as! CAShapeLayer
-            layerToSelect.position = CGPointMake(0, 0)
+            layerToSelect.position = CGPoint(x: 0, y: 0)
             layerToSelect.zPosition = 0
             selectedLayerIndex = -1
         }
     }
     
-    func getSelectedLayerIndexOnTouch(touch: UITouch) -> Int {
+    func getSelectedLayerIndexOnTouch(_ touch: UITouch) -> Int {
         
         var selectedIndex = -1
         
@@ -354,18 +354,18 @@ public class ARPieChart: UIView {
         
         if currentPieLayers != nil {
             
-            let point = touch.locationInView(contentView)
+            let point = touch.location(in: contentView)
             
             for i in 0 ..< currentPieLayers!.count {
                 
                 let pieLayer = currentPieLayers![i] as! CAShapeLayer
                 
-                let pieStartAngle = pieLayer.strokeStart * CGFloat(M_PI * 2)
-                let pieEndAngle = pieLayer.strokeEnd * CGFloat(M_PI * 2)
+                let pieStartAngle = pieLayer.strokeStart * CGFloat(Float.pi * 2)
+                let pieEndAngle = pieLayer.strokeEnd * CGFloat(Float.pi * 2)
                 
                 var angle = atan2(point.y - pieCenter.y, point.x - pieCenter.x) - startAngle
                 if angle < 0 {
-                    angle += CGFloat(M_PI * 2)
+                    angle += CGFloat(Float.pi * 2)
                 }
                 
                 let distance = sqrt(pow(point.x - pieCenter.x, 2) + pow(point.y - pieCenter.y, 2))
@@ -380,7 +380,7 @@ public class ARPieChart: UIView {
         return selectedIndex
     }
     
-    func handleLayerSelection(fromIndex: Int, toIndex: Int) {
+    func handleLayerSelection(_ fromIndex: Int, toIndex: Int) {
         if fromIndex == -1 && toIndex != -1 {
             selectLayerAtIndex(toIndex)
             delegate?.pieChart(self, itemSelectedAtIndex: toIndex)
@@ -390,8 +390,8 @@ public class ARPieChart: UIView {
         }
     }
     
-    public override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if let anyTouch: UITouch = touches.first! as UITouch {
+    open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let anyTouch: UITouch = touches.first {
             let selectedIndex = getSelectedLayerIndexOnTouch(anyTouch)
             handleLayerSelection(self.selectedLayerIndex, toIndex: selectedIndex)
         }
